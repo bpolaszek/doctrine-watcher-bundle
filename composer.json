@@ -1,0 +1,48 @@
+{
+    "name": "bentools/doctrine-watcher-bundle",
+    "description": "Symfony Bundle for bentools/doctrine-watcher",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Beno!t POLASZEK",
+            "email": "bpolaszek@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.1",
+        "bentools/doctrine-watcher": "1.0.x-dev",
+        "symfony/http-kernel": "^2.8|^3.0|^4.0"
+    },
+    "require-dev": {
+        "nyholm/symfony-bundle-test": "^1.4",
+        "phpunit/phpunit": "^5.0|^6.0|^7.0",
+        "symfony/config": "^4.0",
+        "symfony/dependency-injection": "^3.0|^4.0",
+        "symfony/framework-bundle": "^3.0|^4.0",
+        "symfony/http-foundation": "^3.0|^4.0",
+        "symfony/routing": "^3.0|^4.0",
+        "symfony/security": "^3.0|^4.0",
+        "symfony/var-dumper": "^3.0|^4.0",
+        "symfony/yaml": "^3.0|^4.0",
+        "doctrine/doctrine-bundle": "^1.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "BenTools\\DoctrineWatcherBundle\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "BenTools\\DoctrineWatcherBundle\\Tests\\": "tests"
+        },
+        "files": [
+            "vendor/symfony/var-dumper/Resources/functions/dump.php"
+        ]
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
