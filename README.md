@@ -5,12 +5,12 @@ A Symfony bundle for [bentools/doctrine-watcher](https://github.com/bpolaszek/do
 ## Installation
 
 ```bash
-composer require bentools/doctrine-watcher:1.0.x-dev
+composer require bentools/doctrine-watcher-bundle:1.0.x-dev
 ```
 
 ## Configuration
 
-There are 2 way to configure the bundle:
+There are 2 ways to configure the bundle:
 
 ### Via bundle configuration
 
