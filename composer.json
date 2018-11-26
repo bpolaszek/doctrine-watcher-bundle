@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=7.1",
-        "bentools/doctrine-watcher": "1.0.x-dev",
+        "bentools/doctrine-watcher": "*",
         "symfony/http-kernel": "^2.8|^3.0|^4.0"
     },
     "require-dev": {
