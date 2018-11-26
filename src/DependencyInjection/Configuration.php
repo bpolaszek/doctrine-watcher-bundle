@@ -2,7 +2,6 @@
 
 namespace BenTools\DoctrineWatcherBundle\DependencyInjection;
 
-use BenTools\DoctrineWatcher\Changeset\PropertyChangeset;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -17,7 +16,6 @@ class Configuration implements ConfigurationInterface
 
                 ->arrayNode('options')
                     ->children()
-                        ->scalarNode('type')->defaultValue(PropertyChangeset::CHANGESET_DEFAULT)->end()
                         ->booleanNode('trigger_on_persist')->defaultFalse()->end()
                         ->booleanNode('trigger_when_no_changes')->defaultFalse()->end()
                     ->end()
@@ -27,25 +25,15 @@ class Configuration implements ConfigurationInterface
                     ->useAttributeAsKey('entity_class')
                     ->arrayPrototype()
                         ->children()
-                            ->arrayNode('options')
-                                ->children()
-                                    ->scalarNode('type')->defaultValue(PropertyChangeset::CHANGESET_DEFAULT)->end()
-                                    ->booleanNode('trigger_on_persist')->defaultFalse()->end()
-                                    ->booleanNode('trigger_when_no_changes')->defaultFalse()->end()
-                                ->end()
-                            ->end()
+                            ->booleanNode('trigger_on_persist')->defaultFalse()->end()
+                            ->booleanNode('trigger_when_no_changes')->defaultFalse()->end()
                             ->arrayNode('properties')
                                 ->useAttributeAsKey('property')
                                 ->arrayPrototype()
                                     ->children()
                                         ->scalarNode('callback')->end()
-                                            ->arrayNode('options')
-                                                ->children()
-                                                    ->scalarNode('type')->defaultValue(PropertyChangeset::CHANGESET_DEFAULT)->end()
-                                                    ->booleanNode('trigger_on_persist')->defaultFalse()->end()
-                                                    ->booleanNode('trigger_when_no_changes')->defaultFalse()->end()
-                                                ->end()
-                                            ->end()
+                                        ->booleanNode('trigger_on_persist')->defaultFalse()->end()
+                                        ->booleanNode('trigger_when_no_changes')->defaultFalse()->end()
                                         ->booleanNode('iterable')->defaultFalse()->end()
                                     ->end()
                                 ->end()

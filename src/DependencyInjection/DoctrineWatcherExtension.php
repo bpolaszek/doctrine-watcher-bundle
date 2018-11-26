@@ -42,21 +42,25 @@ class DoctrineWatcherExtension extends Extension
     {
         $watcherDefinition = $container->findDefinition(DoctrineWatcher::class);
         if (isset($config['options'])) {
-            $watcherDefinition->setArgument('options', $config['options']);
+            $watcherDefinition->setArgument('$options', $config['options']);
         }
 
         foreach ($config['watch'] ?? [] as $entityClass => $entityConfig) {
             foreach ($entityConfig['properties'] as $property => $propertyConfig) {
-                $propertyOptions = $propertyConfig['options'] ?? [];
-                if (isset($propertyConfig['iterable'])) {
-                    $propertyOptions['type'] = $propertyConfig['iterable'] ? PropertyChangeset::CHANGESET_ITERABLE : PropertyChangeset::CHANGESET_DEFAULT;
-                }
 
+                $propertyOptions = [
+                    'trigger_on_persist' => $propertyConfig['trigger_on_persist'] ?? $entityConfig['trigger_on_persist'] ?? null,
+                    'trigger_when_no_changes' => $propertyConfig['trigger_when_no_changes'] ?? $entityConfig['trigger_when_no_changes'] ?? null,
+                ];
+
+                $propertyOptions = array_diff($propertyOptions, array_filter($propertyOptions, 'is_null'));
+
+                $propertyConfig['iterable'] = $propertyConfig['iterable'] ?? false;
                 $callback = explode('::', $propertyConfig['callback']);
                 $callback[1] = $callback[1] ??'__invoke';
                 $callback[0] = new Reference($callback[0]);
 
-                $watcherDefinition->addMethodCall('watch', [
+                $watcherDefinition->addMethodCall($propertyConfig['iterable'] ? 'watchIterable' : 'watch', [
                     $entityClass,
                     $property,
                     $callback,

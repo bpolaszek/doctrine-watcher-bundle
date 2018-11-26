@@ -29,16 +29,11 @@ final class DoctrineWatcherCompilerPass implements CompilerPassInterface
                 $data['callback'] = sprintf('%s::%s', $serviceId, $data['method']);
 
                 $propertyConfig = [
-                    'callback' => $data['callback']
+                    'callback' => $data['callback'],
+                    'iterable' => $data['iterable'] ?? null,
+                    'trigger_on_persist' => $data['trigger_on_persist'] ?? null,
+                    'trigger_when_no_changes' => $data['trigger_when_no_changes'] ?? null,
                 ];
-
-                if (isset($data['iterable'])) {
-                    $propertyConfig['iterable'] = (bool) $data['iterable'];
-                }
-
-                if (isset($data['options'])) {
-                    $propertyConfig['iterable'] = $data['options'];
-                }
 
                 $config['watch'][$data['entity_class']]['properties'][$data['property']] = $propertyConfig;
             }
