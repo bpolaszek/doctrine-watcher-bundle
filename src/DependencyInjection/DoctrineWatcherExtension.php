@@ -55,19 +55,41 @@ class DoctrineWatcherExtension extends Extension
 
                 $propertyOptions = array_diff($propertyOptions, array_filter($propertyOptions, 'is_null'));
 
-                $propertyConfig['iterable'] = $propertyConfig['iterable'] ?? false;
-                $callback = explode('::', $propertyConfig['callback']);
-                $callback[1] = $callback[1] ??'__invoke';
-                $callback[0] = new Reference($callback[0]);
-
-                $watcherDefinition->addMethodCall($propertyConfig['iterable'] ? 'watchIterable' : 'watch', [
+                self::registerWatcher(
+                    $container,
                     $entityClass,
                     $property,
-                    $callback,
+                    $propertyConfig['callback'],
+                    $propertyConfig['iterable'],
                     $propertyOptions
-                ]);
+                );
             }
         }
+    }
+
+    /**
+     * @param ContainerBuilder $container
+     * @param string           $entityClass
+     * @param string           $property
+     * @param                  $callback
+     * @param bool             $iterable
+     * @param array            $options
+     * @throws \Symfony\Component\DependencyInjection\Exception\InvalidArgumentException
+     * @throws \Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException
+     */
+    public static function registerWatcher(ContainerBuilder $container, string $entityClass, string $property, $callback, bool $iterable, array $options): void
+    {
+        $watcherDefinition = $container->findDefinition(DoctrineWatcher::class);
+        $method = $iterable ? 'watchIterable' : 'watch';
+        $callback = explode('::', $callback);
+        $callback[1] = $callback[1] ??'__invoke';
+        $callback[0] = new Reference($callback[0]);
+        $watcherDefinition->addMethodCall($method, [
+            $entityClass,
+            $property,
+            $callback,
+            $options,
+        ]);
     }
 
     /**

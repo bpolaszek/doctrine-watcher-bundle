@@ -25,22 +25,22 @@ final class DoctrineWatcherCompilerPass implements CompilerPassInterface
                     throw new \InvalidArgumentException('Config key "property" is required.');
                 }
 
-                $data['method'] = $data['method'] ?? '__invoke';
-                $data['callback'] = sprintf('%s::%s', $serviceId, $data['method']);
-
-                $propertyConfig = [
-                    'callback' => $data['callback'],
-                    'iterable' => $data['iterable'] ?? null,
-                    'trigger_on_persist' => $data['trigger_on_persist'] ?? null,
+                $options = [
+                    'trigger_on_persist'      => $data['trigger_on_persist'] ?? null,
                     'trigger_when_no_changes' => $data['trigger_when_no_changes'] ?? null,
                 ];
+                $options = array_diff($options, array_filter($options, 'is_null'));
 
-                $config['watch'][$data['entity_class']]['properties'][$data['property']] = $propertyConfig;
+                DoctrineWatcherExtension::registerWatcher(
+                    $container,
+                    $data['entity_class'],
+                    $data['property'],
+                    sprintf('%s::%s', $serviceId, $data['method'] ?? '__invoke'),
+                    $data['iterable'] ?? false,
+                    $options
+                );
             }
         }
 
-        if (!empty($config)) {
-            DoctrineWatcherExtension::loadConfiguration($config, $container);
-        }
     }
 }
